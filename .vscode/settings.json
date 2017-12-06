@@ -24,6 +24,9 @@
     "rt.h": "c",
     "parser.h": "c",
     "string.h": "c",
-    "main.h": "c"
+    "main.h": "c",
+    "layers.h": "c",
+    "utils.h": "c",
+    "executer.h": "c"
   }
 }
