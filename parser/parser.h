@@ -7,7 +7,7 @@
 
 // public functions
 int parseText(uint8_t * data, uint8_t dataLength, l1_t * l1);
-int parseL1(l1_t * t1, l2_t * l2);
+void parseL1(l1_t * t1, l2_t * l2);
 
 // private functions
 static int raise(int raiser, int exponent);

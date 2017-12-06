@@ -31,7 +31,7 @@ int parseText(uint8_t * data, uint8_t dataLength, l1_t * l1) {
   if (count == 2) {    
     int addr = 0;
     for (int i = 0; i < positions[0]; i++) {
-      // chceck invalid characters, valid are 0 - 9 only
+      // chceck invalid characters, only 0 - 9 are valid
       if (data[i] < '0' || data[i] > '9') {
         return -1;
       }
@@ -48,6 +48,27 @@ int parseText(uint8_t * data, uint8_t dataLength, l1_t * l1) {
     l1->dataLength = dataLength - (l1->dataPtr - data);
     l1->hops = 0;
     return 0;
+  }
+}
+
+void parseL1(l1_t * l1, l2_t * l2) {
+  // find ':' character
+  int i;
+  for (i = 0; i < l1->dataLength; i++) {
+    if ((l1->dataPtr)[i] == ':') break;
+  }
+  
+  l2->cmdLength = i;
+  if (i == 0) {
+    l2->cmdPtr = NULL;
+  } else {
+    l2->cmdPtr = l1->dataPtr;
+  }
+  l2->dataLength = l1->dataLength - l2->cmdLength - 1;
+  if (l2->dataLength <= 0) {
+    l2->dataPtr = NULL;
+  } else {
+    l2->dataPtr = &(l1->dataPtr)[i + 1];
   }
 }
 
