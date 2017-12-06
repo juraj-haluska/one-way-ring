@@ -1,4 +1,5 @@
 #include "rt.h"
+#include "../simulation/main.h"
 
 char rt_table[RT_SIZE][ADDR_SIZE];
 

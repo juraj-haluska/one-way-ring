@@ -2,7 +2,6 @@
 #define RT_H_
 
 #define RT_SIZE   10
-#define ADDR_SIZE 8
 
 // initialize address table
 void rtInit(void);

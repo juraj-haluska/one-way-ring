@@ -20,6 +20,10 @@
     "streambuf": "cpp",
     "system_error": "cpp",
     "type_traits": "cpp",
-    "typeinfo": "cpp"
+    "typeinfo": "cpp",
+    "rt.h": "c",
+    "parser.h": "c",
+    "string.h": "c",
+    "main.h": "c"
   }
 }

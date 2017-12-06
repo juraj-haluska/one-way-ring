@@ -1,3 +1,6 @@
+#ifndef LAYERS_H_
+#define LAYERS_H_
+
 typedef struct {
   char hops;
   char addr;
@@ -11,3 +14,5 @@ typedef struct {
   char dataLength;
   char * dataPtr;
 } l2_t;
+
+#endif /* LAYERS_H_ */
