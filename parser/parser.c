@@ -3,9 +3,9 @@
 #include <stdio.h>  // because of NULL
 #include "parser.h"
 #include <stdlib.h>
-#include "../simulation/main.h"
+#include <inttypes.h>
 
-int parseText(char * data, int dataLength, l1_t * l1) {
+int parseText(uint8_t * data, uint8_t dataLength, l1_t * l1) {
   int count = 0;
   int positions [SEGMENTS - 1];
 
@@ -28,18 +28,17 @@ int parseText(char * data, int dataLength, l1_t * l1) {
     return 0;
   }
 
-  if (count == 2) {
-    data[positions[0]] = '\0';
-    
+  if (count == 2) {    
     int addr = 0;
     for (int i = 0; i < positions[0]; i++) {
-      printf("expo: %d", positions[0] - 1 - i);
-      printf("value: %d", raise(10, positions[0] - 1 - i));
-      printf("mult: %d", (data[i] - '0'));
+      // chceck invalid characters, valid are 0 - 9 only
+      if (data[i] < '0' || data[i] > '9') {
+        return -1;
+      }
       addr += (raise(10, positions[0] - 1 - i)) * (data[i] - '0');
     }
 
-    int offset = raise(2, ADDR_SIZE);
+    int offset = raise(2, sizeof(uint8_t) * 8);
     if (addr >= offset) {
       return -1;
     }

@@ -1,6 +1,7 @@
 #ifndef RT_H_
 #define RT_H_
 
+// capacity of routing table
 #define RT_SIZE   10
 
 // initialize address table
