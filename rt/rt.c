@@ -1,17 +1,14 @@
 #include "rt.h"
-#include "../simulation/main.h"
 
-char rt_table[RT_SIZE][ADDR_SIZE];
+uint8_t rt_table[RT_SIZE];
 
 void rtInit() {
   for (int i = 0; i < RT_SIZE; i++) {
-    for (int a = 0; a < ADDR_SIZE; a++) {
-      rt_table[i][a] = '\0';
-    }
+    dropAddress(i);
   }
 }
 
-int rtAdd(char * addr) {
+int rtAdd(uint8_t addr) {
   int emptySlot = getEmptySlot();
   if (emptySlot != -1) {
     insertAddress(addr, emptySlot);
@@ -20,7 +17,7 @@ int rtAdd(char * addr) {
   return -1;
 }
 
-int rtCheckout(char * addr) {
+int rtCheckout(uint8_t addr) {
   int slot = findAddress(addr);
   if (slot != -1) {
     dropAddress(slot);
@@ -33,34 +30,24 @@ int rtCheckout(char * addr) {
 // private functions
 static int getEmptySlot() {
   for(int i = 0; i < RT_SIZE; i++) {
-    if (rt_table[i][0] == '\0') {
+    if (rt_table[i] == 0x00) {
       return i;
     }
   }
   return -1;
 }
 
-static void insertAddress(char * addr, int slot) {
-  for (int i = 0; i < ADDR_SIZE; i++) {
-    rt_table[slot][i] = addr[i];
-  }
+static void insertAddress(uint8_t addr, int slot) {
+  rt_table[slot] = addr;
 }
 
 static void dropAddress(int slot) {
-  for (int i = 0; i < ADDR_SIZE; i++) {
-    rt_table[slot][i] = '\0';
-  }
+  rt_table[slot] = 0x00;
 }
 
-static int findAddress(char * addr) {
+static int findAddress(uint8_t addr) {
   for (int i = 0; i < RT_SIZE; i++) {
-    int match = 0;
-    for (int a = 0; a < ADDR_SIZE; a++) {
-      if (rt_table[i][a] == addr[a]) {
-        match++;
-      }
-    }
-    if (match == ADDR_SIZE) {
+    if (addr == rt_table[i]) {
       return i;
     }
   }
