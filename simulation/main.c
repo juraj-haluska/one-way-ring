@@ -1,15 +1,13 @@
 #include <stdio.h>
 #include "../parser/parser.h"
-#include "../layers.h"
+#include "../frame/frame.h"
 #include <string.h>
-#include "../utils/utils.h"
 #include "../executer/executer.h"
 #include "main.h"
 
 #define MYADDR 41
 
-char test [] = "41:debug:ghgh";
-char test1 [] = "helloworld";
+char test [] = "415:debug:sdfsdfsd:fsdfdsfsdfsdf";
 
 int main() {
   urx(test, strlen(test));
@@ -17,26 +15,25 @@ int main() {
 }
 
 void urx(char * buffer, int buffLength) {
-  l1_t l1;
+  frame_t frame;
   
-  int parserResult = parseText((uint8_t *) buffer, (uint8_t) buffLength, &l1);
-  // parsing successful
-  if (parserResult == 0) {
-    l2_t l2;
-    parseL1(&l1, &l2);
+  parseText((uint8_t *) buffer, (uint8_t) buffLength, &frame);
+  printf("parsed data:\r\n");
+  printf(" hops:\t%d\r\n", frame.header.hops);
+  printf(" addr:\t%d\r\n", frame.header.addr);
+  printf(" cmd:\t%d\r\n", frame.header.cmd);
+  printf(" dataLength:\t%d\r\n", frame.header.dataLength);
+  printf(" data:\t%s\r\n", frame.data);
 
-    if (!checkAddress(MYADDR, l1.addr)) {
-        // rt_add ...
-        printf("unknown address\r\n");
+  uint8_t responseBuffer[100];
+  execute(responseBuffer, 99, &frame);
 
-      return;
-    }
-    uint8_t buffer[100];
-    memset(buffer, '\0', 100);
-    execute(&l2, buffer, 100 - 1);
-    printf("response: %s\r\n", buffer);
-    // humanize ...
-  }
+  printf("response data:\r\n");
+  printf(" hops:\t%d\r\n", frame.header.hops);
+  printf(" addr:\t%d\r\n", frame.header.addr);
+  printf(" cmd:\t%d\r\n", frame.header.cmd);
+  printf(" dataLength:\t%d\r\n", frame.header.dataLength);
+  printf(" data:\t%s\r\n", frame.data);
 }
 
 void utx(char * buffer, int buffLength) {

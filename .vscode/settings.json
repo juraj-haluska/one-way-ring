@@ -28,6 +28,9 @@
     "layers.h": "c",
     "utils.h": "c",
     "executer.h": "c",
-    "bundler.h": "c"
+    "bundler.h": "c",
+    "stdio.h": "c",
+    "frame.h": "c",
+    "inttypes.h": "c"
   }
 }

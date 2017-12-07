@@ -1,29 +1,24 @@
 #include "executer.h"
 #include <string.h>
 #include <stdio.h>
+#include "../frame/frame.h"
 
-#define compareCmd(l2, cmd) (strncmp(l2->cmdPtr, cmd, min(l2->cmdLength, strlen(cmd))) == 0)
+void execute(uint8_t * responseData, int responseCapacity, frame_t * frame) {
+  memset(responseData, '\0', responseCapacity);
 
-int execute(l2_t * l2, uint8_t * buffer, int bufferSize) {
   // address of the last byte in the buffer
-  const uint8_t * bufferEnd = buffer + bufferSize - 1;
-  int written = 0;
-  // add response message to buffer
-  written += append(&buffer, bufferEnd, RESP_CODE);
+  const uint8_t * bufferEnd = responseData + responseCapacity - 1;
 
-  if (l2->cmdLength == 0) {
-    written += append(&buffer, bufferEnd, RESP_UNKNOWN);
-    return written;
-  } else if (compareCmd(l2, CMD_DEBUG)) {
-    written += append(&buffer, bufferEnd, RESP_OK);
-    return written;
-  } else if (compareCmd(l2, CMD_LED1)) {
-    written += append(&buffer, bufferEnd, RESP_LED1);
-    return written;
-  }
+  uint8_t cmd = frame->header.cmd;
+  frame->header.cmd = CMDC_RESPONSE;
+  frame->header.dataLength = 0;
+  frame->data = responseData;
 
-  written += append(&buffer, bufferEnd, RESP_UNKNOWN);
-  return written;
+  if (cmd == CMDC_UNDEFINED) {
+    frame->header.dataLength += append(&responseData, bufferEnd, RESP_UNDEFINED);
+  } else if (cmd == CMDC_DEBUG) {
+    frame->header.dataLength += append(&responseData, bufferEnd, RESP_OK);
+  } 
 }
 
 static int min(int a, int b) {

@@ -1,20 +1,21 @@
 #ifndef EXECUTER_H_
 #define EXECUTER_H_
 
-#include "../layers.h"
+#include <inttypes.h>
+#include "../frame/frame.h"
 
 // commands
-#define CMD_DEBUG "debug"
-#define CMD_LED1 "led1"
+#define CMDC_RESPONSE 0xFF
+#define CMDC_DEBUG 0x01
+#define CMDC_UNDEFINED 0x00
 
 // responses
 #define RESP_CODE "RESPONSE"
 #define RESP_OK "everything is just fine"
-#define RESP_UNKNOWN "unknown command"
+#define RESP_UNDEFINED "undefined command"
 #define RESP_LED1 "led1 command executed"
 
-
-int execute(l2_t * l2, uint8_t * buffer, int bufferSize);
+void execute(uint8_t * responseData, int responseCapacity, frame_t * frame);
 
 static int min(int a, int b);
 static int append(uint8_t ** actual, const uint8_t * last, char * text);
