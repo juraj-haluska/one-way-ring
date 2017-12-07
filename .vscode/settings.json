@@ -27,6 +27,7 @@
     "main.h": "c",
     "layers.h": "c",
     "utils.h": "c",
-    "executer.h": "c"
+    "executer.h": "c",
+    "bundler.h": "c"
   }
 }

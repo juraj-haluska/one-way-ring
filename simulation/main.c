@@ -8,7 +8,7 @@
 
 #define MYADDR 41
 
-char test [] = "41::";
+char test [] = "41:debug:ghgh";
 char test1 [] = "helloworld";
 
 int main() {
@@ -31,10 +31,10 @@ void urx(char * buffer, int buffLength) {
 
       return;
     }
-
-    uint8_t response[RESPONSE_SIZE];
-    execute(&l2, &l1, response);
-
+    uint8_t buffer[100];
+    memset(buffer, '\0', 100);
+    execute(&l2, buffer, 100 - 1);
+    printf("response: %s\r\n", buffer);
     // humanize ...
   }
 }
