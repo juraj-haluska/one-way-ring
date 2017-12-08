@@ -5,6 +5,7 @@
 #include "../executer/executer.h"
 #include "main.h"
 #include "../rt/rt.h"
+#include <pthread.h>
 
 #define MYADDR 41
 #define RECV_BUFF_SIZE 100
@@ -22,12 +23,38 @@ int main(int argc, char ** args) {
   }
 
   in = fopen(args[1], "r");
-  out = fopen(args[2], "a");
+  out = fopen(args[2], "w");
   if (in == NULL || out == NULL) {
     fprintf(debug, "%d: error opening pipes\r\n", MYADDR);
+  } else {
+    fprintf(debug, "%d: pipes opened!\r\n", MYADDR);
   }
 
   rtInit();
+
+  pthread_attr_t thAttr;
+	pthread_attr_init(&thAttr);
+
+  pthread_t thUserReader;
+  pthread_t thBoardReader;
+
+  thData_t thUserReaderData;
+    thUserReaderData.handler = &urx;
+    thUserReaderData.source = stdin;
+
+  thData_t thBoardReaderData;
+  thBoardReaderData.handler = &brx;
+  thBoardReaderData.source = in;
+
+  if (pthread_create(&thUserReader, &thAttr,(void *) &reader, &thUserReaderData) != 0) {
+    printf(stdout, "%d: error creating userReader thread\r\n", MYADDR);
+  }
+  if (pthread_create(&thBoardReader, &thAttr,(void *) &reader, &thBoardReaderData) != 0) {
+    printf(stdout, "%d: error creating boardReader thread\r\n", MYADDR);
+  }
+
+  pthread_join(thUserReader, NULL);
+  pthread_join(thBoardReader, NULL);
 
   return 0;
 }
@@ -66,6 +93,7 @@ void btx(frame_t frame) {
   for (int i = 0; i < frame.header.dataLength; i++) {
     putc(frame.data[i], out);
   }
+  putc(';', out);
 }
 
 void brx(char * buffer, int buffLength) {
@@ -91,11 +119,14 @@ void brx(char * buffer, int buffLength) {
 }
 
 /* threads */
-void * userReader(void * params) {
-
+void * reader(void * params) {
+  printf("kurva\r\n");
+  fprintf(debug, "started\r\n");
   thData_t * thData = (thData_t *) params;
 
   char recvBuffer[RECV_BUFF_SIZE];
+
+  fprintf(debug, "started\r\n");
 
   while (1) {
 
@@ -103,11 +134,15 @@ void * userReader(void * params) {
     char ch = '\0';
     int i = 0;
     
-    while ('\n' != (ch = getc(thData->source)) && i < (RECV_BUFF_SIZE - 1)) {
+    while (';' != (ch = getc(thData->source))) {
+      fprintf(debug, "char: %c\r\n", ch);
       recvBuffer[i] = ch;
       i++;
     }
 
+    fprintf(debug, "complete\r\n");
     thData->handler(recvBuffer, i);
   }
+
+  return NULL;
 }

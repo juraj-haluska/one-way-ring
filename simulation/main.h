@@ -13,4 +13,7 @@ void utx(frame_t frame);
 void btx(frame_t frame);
 void brx(char * buffer, int buffLength);
 
+// thread
+void * reader(void * params);
+
 #endif /* MAIN_H_ */
