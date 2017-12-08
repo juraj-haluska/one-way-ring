@@ -10,10 +10,8 @@
 #define CMDC_UNDEFINED 0x00
 
 // responses
-#define RESP_CODE "RESPONSE"
 #define RESP_OK "everything is just fine"
 #define RESP_UNDEFINED "undefined command"
-#define RESP_LED1 "led1 command executed"
 
 void execute(uint8_t * responseData, int responseCapacity, frame_t * frame);
 

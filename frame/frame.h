@@ -17,5 +17,6 @@ typedef struct {
 
 void initFrame(frame_t * frame);
 int bundle(uint8_t * buffer, int buffSize, frame_t * frame);
+int unbundle(uint8_t * buffer, int dataLength, frame_t * frame);
 
 #endif /* FRAME_H_ */

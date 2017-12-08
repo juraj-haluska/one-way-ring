@@ -24,3 +24,21 @@ int bundle(uint8_t * buffer, int buffSize, frame_t * frame) {
 
   return i;
 }
+
+int unbundle(uint8_t * buffer, int dataLength, frame_t * frame) {
+  if (dataLength < sizeof(header_t)) {
+    return -1;
+  }
+
+  int i;
+  for (i = 0; i < sizeof(header_t); i++) {
+    *(((uint8_t *) frame) + i) = buffer[i];
+  }
+
+  if (frame->header.dataLength != (dataLength - sizeof(header_t))) {
+    return -1;
+  }
+
+  frame->data = &buffer[i];
+  return 0;
+} 

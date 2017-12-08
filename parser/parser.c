@@ -4,6 +4,7 @@
 #include "parser.h"
 #include <inttypes.h>
 #include "../commands.h"
+#include "../executer/executer.h"
 
 void parseText(uint8_t * data, uint8_t dataLength, frame_t * frame) {
   int count = 0;
@@ -74,9 +75,9 @@ static int raise(int raiser, int exponent) {
 
 static uint8_t parseCommand(uint8_t * command, int commandLength) {
   if (strncmp(command, DEBUG, min(commandLength, strlen(DEBUG))) == 0) {
-    return 0x01;
+    return CMDC_DEBUG;
   } else {
-    return 0x00;
+    return CMDC_UNDEFINED;
   }
 }
 
