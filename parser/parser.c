@@ -76,6 +76,14 @@ static int raise(int raiser, int exponent) {
 static uint8_t parseCommand(uint8_t * command, int commandLength) {
   if (strncmp(command, DEBUG, min(commandLength, strlen(DEBUG))) == 0) {
     return CMDC_DEBUG;
+  } else if (strncmp(command, LED1, min(commandLength, strlen(LED1))) == 0) {
+    return CMDC_LED1;
+  } else if (strncmp(command, LED2, min(commandLength, strlen(LED2))) == 0) {
+    return CMDC_LED2;
+  } else if (strncmp(command, PRINT, min(commandLength, strlen(PRINT))) == 0) {
+    return CMDC_PRINT;
+  } else if (strncmp(command, TRACE, min(commandLength, strlen(TRACE))) == 0) {
+    return CMDC_TRACE;
   } else {
     return CMDC_UNDEFINED;
   }

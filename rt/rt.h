@@ -13,10 +13,4 @@ int rtAdd(uint8_t addr);
 // returns -1 if address is not in address table
 int rtCheckout(uint8_t addr);
 
-// private functions
-static void insertAddress(uint8_t addr, int slot);
-static int getEmptySlot(void);
-static void dropAddress(int slot);
-static int findAddress(uint8_t addr);
-
 #endif /* RT_H_ */

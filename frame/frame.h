@@ -2,6 +2,7 @@
 #define FRAME_H_
 
 #include <inttypes.h>
+#include "../address.h"
 
 typedef struct {
   uint8_t hops;
